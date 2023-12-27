@@ -1,6 +1,5 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-{{ hugo.Generator }}
 {{ range .AlternativeOutputFormats -}}
 <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink | safeURL }}">
 {{ end -}}
@@ -27,19 +26,21 @@
 {{ template "_internal/twitter_cards.html" . -}}
 {{ partialCached "head-css.html" . "asdf" -}}
 <script
-  src="{{ "/js/jquery-3.6.0.min.js" | relURL }}"
-  integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK">
-</script>
+  src="{{ "/js/jquery-3.6.3.min.js" | relURL }}"
+  integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+  crossorigin="anonymous"></script>
 {{ if .Site.Params.offlineSearch -}}
 <script defer
   src="{{ "/js/lunr-2.3.9.min.js" | relURL }}"
-  integrity="sha384-203J0SNzyqHby3iU6hzvzltrWi/M41wOP5Gu+BiJMz5nwKykbkUx8Kp7iti0Lpli">
-</script>
+  integrity="sha384-203J0SNzyqHby3iU6hzvzltrWi/M41wOP5Gu+BiJMz5nwKykbkUx8Kp7iti0Lpli"
+  crossorigin="anonymous"></script>
 {{ end -}}
 
 {{ if .Site.Params.prism_syntax_highlighting -}}
 <link rel="stylesheet" href="{{ "css/prism.css" | relURL }}"/>
 {{ end -}}
+
+{{ template "algolia/head" . -}}
 
 {{ partial "hooks/head-end.html" . -}}
 
@@ -51,4 +52,19 @@
   {{ else -}}
     {{ template "_internal/google_analytics_async.html" . -}}
   {{ end -}}
+{{ end -}}
+
+{{ define "algolia/head" -}}
+
+{{ if and .Site.Params.search (isset .Site.Params.search "algolia") -}}
+<link rel="stylesheet" href="{{ "/css/docsearch-3.5.2.min.css" | relURL }}"
+  integrity="sha512-TW5eKlwwg7OfQUVBqxjp94/uqtjJJbhkRE3++XGEQjAL1n3y//QVqS3acPkwqkzInaFRtj+w05uyxDbfDXiI1A=="
+  crossorigin="anonymous" />
+{{ end -}}
+
+{{ if ne .Site.Params.algolia_docsearch nil -}}
+{{ warnf `Config 'params.algolia_docsearch' is deprecated: use 'params.search.algolia'
+      For details, see https://www.docsy.dev/docs/adding-content/search/#algolia-docsearch.` -}}
+{{ end -}}
+
 {{ end -}}
