@@ -1,4 +1,4 @@
-module github.com/zecakeh/matrix-org-docsy
+module github.com/matrix-org/docsy
 
 go 1.12
 
